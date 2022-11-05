@@ -78,6 +78,7 @@ public class TripExpenses extends AppCompatActivity {
            comments.setText(models.getExpenseComments());
            Glide.with(this).load(models.getImageLink()).into(imageView2);
        }else{
+           //display default image
            Glide.with(this).load("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAB8CAMAAAAICk87AAAAJ1BM" +
                    "VEX39/fW1tb4+Pjn5+fz8/Ph4eHu7u7r6+vk5OTc3NzT09PZ2dnQ0NCrk/CdAAAEpUlEQVR4nNVc65qrIAzUAOKl7/+8J4GeVdBSK" +
                    "wHC/Nndb1thQsgEiAzGDjB0ChisGbRSU58UgPpOP6a5y0FA88/e9PSb7o4B6IPdobtBcOaH+O9uKMCFxWlEevEj0Fc+j4PQRzjCqK" +
@@ -98,25 +99,48 @@ public class TripExpenses extends AppCompatActivity {
             }
         });
         tripBtn.setOnClickListener(v -> {
-            tripModel model = new tripModel(
-                    name.getText().toString().trim(),
-                    date.getText().toString().trim(),
-                    name.getText().toString().trim(),
-                    destination.getText().toString().trim(),
-                    risk.getText().toString().trim(),
-                    discription.getText().toString().trim(),
-                    imagePath,
-                    type.getText().toString().trim(),
-                    amount.getText().toString().trim(),
-                    time.getText().toString().trim(),
-                    comments.getText().toString().trim(),
-                    models.getId()
-                    );
+
             Intent i = getIntent();
             boolean hasData =  i.getExtras().getBoolean("hasData");
+
+            //validate data
+            if (name.getText().toString().trim().equals("") ||destination.getText().toString().trim().equals("") ||date.getText().toString().trim().equals("") ||risk.getText().toString().trim().equals("") ||type.getText().toString().trim().equals("") ||amount.getText().toString().trim().equals("") ||time.getText().toString().trim().equals("") ){
+                Toast.makeText(this, "Please add required data", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (hasData){
+                tripModel model = new tripModel(
+                        name.getText().toString().trim(),
+                        date.getText().toString().trim(),
+                        name.getText().toString().trim(),
+                        destination.getText().toString().trim(),
+                        risk.getText().toString().trim(),
+                        discription.getText().toString().trim(),
+                        imagePath,
+                        type.getText().toString().trim(),
+                        amount.getText().toString().trim(),
+                        time.getText().toString().trim(),
+                        comments.getText().toString().trim(),
+                        models.getId()
+                );
                 db.updateTrip(model);
             }else{
+                tripModel model = new tripModel(
+                        name.getText().toString().trim(),
+                        date.getText().toString().trim(),
+                        name.getText().toString().trim(),
+                        destination.getText().toString().trim(),
+                        risk.getText().toString().trim(),
+                        discription.getText().toString().trim(),
+                        imagePath,
+                        type.getText().toString().trim(),
+                        amount.getText().toString().trim(),
+                        time.getText().toString().trim(),
+                        comments.getText().toString().trim(),
+                        ""
+                );
+                //save trup details if valid
                 db.addData(model);
             }
 
@@ -128,6 +152,7 @@ public class TripExpenses extends AppCompatActivity {
         });
     }
 
+    //take photo
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void takePhoto() {
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
@@ -176,6 +201,7 @@ public class TripExpenses extends AppCompatActivity {
         }
     }
 
+    //save image to device directory
     public String saveImage(Bitmap myBitmap) {
         String IMAGE_DIRECTORY = "/YourDirectName";
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

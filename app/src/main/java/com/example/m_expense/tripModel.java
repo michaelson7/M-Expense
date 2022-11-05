@@ -23,11 +23,9 @@ public class tripModel implements Serializable {
     public String getTitle() {
         return title;
     }
-
     public String getDate() {
         return date;
     }
-
     public String getName() {
         return name;
     }

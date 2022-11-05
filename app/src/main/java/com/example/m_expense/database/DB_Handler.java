@@ -8,11 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.annotation.Nullable;
-
 import com.example.m_expense.tripModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +36,7 @@ public class DB_Handler extends SQLiteOpenHelper {
         mContext = context;
     }
 
-
+    //creation of database
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String CreateDB = "CREATE TABLE " + tripTable + "("
@@ -64,6 +60,7 @@ public class DB_Handler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + tripTable);
     }
 
+    //adding data to database
     public void addData(tripModel model) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -86,6 +83,7 @@ public class DB_Handler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    //getting all trip information
     @SuppressLint("Range")
     public List<tripModel> getAllTrips() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -118,11 +116,13 @@ public class DB_Handler extends SQLiteOpenHelper {
         return cropModelList;
     }
 
+    //deleting trip
     public int tripDelete(String ids) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(tripTable, id + "=" + ids, null) ;
     }
 
+    //updating trips
 public void updateTrip(tripModel model){
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues values = new ContentValues();
@@ -143,6 +143,7 @@ public void updateTrip(tripModel model){
             new String[]{valueOf(model.getId())});
 }
 
+//searching for trips
     @SuppressLint("Range")
     public List<tripModel> search(String searchTerm) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -150,7 +151,7 @@ public void updateTrip(tripModel model){
         String selectQuery = "SELECT  * FROM " + tripTable +
                 " WHERE  "  +title + "  like '%" + searchTerm + "%'" +
                 " ORDER BY  " + id+
-                "Limit 100";
+                " Limit 100";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -172,7 +173,6 @@ public void updateTrip(tripModel model){
                     cursor.getString(cursor.getColumnIndex(expenseTime)),
                     cursor.getString(cursor.getColumnIndex(expenseComments)),
                     cursor.getString(cursor.getColumnIndex(id)));
-
             idtModelList.add(cropModel);
         }
         return idtModelList;

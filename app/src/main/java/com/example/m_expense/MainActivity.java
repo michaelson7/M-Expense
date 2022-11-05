@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         setup();
         tripBtn.setOnClickListener(v -> {
+            //open screen that allows you to create trip
             Intent myIntent = new Intent(this, TripExpenses.class);
             myIntent.putExtra("hasData", false);
             startActivity(myIntent);
@@ -45,14 +46,13 @@ public class MainActivity extends AppCompatActivity {
         DB_Handler prcndbHandler = new DB_Handler(this);
         list = (ArrayList<tripModel>) prcndbHandler.getAllTrips();
 
+        //get and display all trips
         adapters[0] = new adapter(this, list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapters[0]);
-//        searchView.setOnClickListener(v -> {
-//            Toast.makeText(this, "Nani?", Toast.LENGTH_SHORT).show();
-//        });
     }
 
+    //display search option on home screen navigation bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
@@ -62,10 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         switch (item.getItemId()) {
             default:
+                Intent myIntent = new Intent(this, SearchActivity.class);
+                myIntent.putExtra("hasData", false);
+                startActivity(myIntent);
                 return super.onOptionsItemSelected(item);
         }
     }
